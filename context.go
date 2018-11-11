@@ -12,7 +12,7 @@ type Context struct {
 	Params   *url.Values
 }
 
-// New creates a new context
-func (ctx *Context) New() {
+// NewContext creates a new context
+func NewContext() *Context {
 	return &Context{}
 }

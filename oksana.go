@@ -2,26 +2,27 @@ package oksana
 
 import "encoding/json"
 
+// Oksana struct holds router and context for framework
 type Oksana struct {
-	Config     Configuration
-	Context    *CTX
+	Config     Config
+	Context    *Context
 	Middleware []MiddlewareHandler
 	Router     *Router
 }
 
 // Handler basic function to router handlers
-type Handler func(*CTX) error
+type Handler func(*Context) error
 
 // MiddlewareHandler defines a function to process middleware
 type MiddlewareHandler func(Handler) Handler
 
 // NotFoundHandler default 404 handler for not found routes
-func NotFoundHandler(ctx *CTX) (err error) {
+func NotFoundHandler(context *Context) (err error) {
 	b, _ := json.Marshal("Not Found")
 
-	ctx.Response.Header().Set("Content-Type", "application/json")
-	ctx.Response.WriteHeader(404)
-	_, err = ctx.Response.Write([]byte(b))
+	context.Response.Header().Set("Content-Type", "application/json")
+	context.Response.WriteHeader(404)
+	_, err = context.Response.Write([]byte(b))
 
 	return
 }
@@ -29,8 +30,8 @@ func NotFoundHandler(ctx *CTX) (err error) {
 // New creates a new service
 func New() (oksana *Oksana) {
 	return &Oksana{
-		Context: new(Context),
-		Router:  new(Router),
+		Context: NewContext(),
+		Router:  NewRouter(),
 	}
 }
 
@@ -39,10 +40,10 @@ func (oksana *Oksana) GetContext() *Context {
 	return oksana.Context
 }
 
-// Middleware adds a middlware handler
-func (oksana *Oksana) Middleware(middleware ...MiddlewareHandler) {
-	for i, handler := range middleware {
-		oksana.Middleware = append(oksana.Middleware, middleware[i])
+// MiddlewareHandler adds a middlware handler
+func (oksana *Oksana) MiddlewareHandler(middleware ...MiddlewareHandler) {
+	for _, handler := range middleware {
+		oksana.Middleware = append(oksana.Middleware, handler)
 	}
 }
 

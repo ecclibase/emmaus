@@ -13,8 +13,8 @@ type Router struct {
 	Routes map[string]Route
 }
 
-// New creates a new router
-func (router *Router) New() {
+// NewRouter creates a new router
+func NewRouter() *Router {
 	return &Router{
 		Routes: make(map[string]Route),
 	}
@@ -44,7 +44,7 @@ func (router *Router) GetRoute(context *Context) Route {
 	method := context.Request.Method
 
 	if val, ok := router.Routes[method+path]; ok {
-		route = router.Routes[method+path]
+		route = val
 	}
 
 	return route
