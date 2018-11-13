@@ -37,17 +37,19 @@ func (router *Router) Add(method string, path string, handler Handler, middlewar
 }
 
 // GetRoute will search routes and return Route
-func (router *Router) GetRoute(context *Context) Route {
+func (router *Router) GetRoute(context *Context) (Route, bool) {
+	found := false
 	var route Route
 
 	path := context.Request.URL.Path
 	method := context.Request.Method
 
 	if val, ok := router.Routes[method+path]; ok {
+		found = true
 		route = val
 	}
 
-	return route
+	return route, found
 }
 
 func (router *Router) find(method string, path string) Route {

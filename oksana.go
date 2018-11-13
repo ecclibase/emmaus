@@ -1,6 +1,10 @@
 package oksana
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+)
 
 // Oksana struct holds router and context for framework
 type Oksana struct {
@@ -83,6 +87,49 @@ func (oksana *Oksana) Group(prefix string, middleware ...MiddlewareHandler) *Gro
 		Middleware: middleware,
 		Prefix:     prefix,
 		Router:     *oksana.Router,
+	}
+}
+
+// Start initates the framework to start listening for requests
+func (oksana *Oksana) Start() {
+	server := oksana.server()
+	if err := server.ListenAndServe(); err != nil {
+		log.Printf("Server error: %s", err)
+	}
+}
+
+func (oksana *Oksana) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	// handler
+	var handler Handler
+
+	// create context
+	oksana.Context = NewContext()
+	oksana.Context.Request = request
+	oksana.Context.Response = NewResponse(writer)
+
+	if route, ok := oksana.Router.GetRoute(oksana.Context); ok {
+		handler = func(*Context) error {
+			handler := route.Handler
+
+			if err := handler(oksana.Context); err != nil {
+				panic(err)
+			}
+
+			return nil
+		}
+
+		handler(oksana.Context)
+	} else {
+		NotFoundHandler(oksana.Context)
+	}
+
+	return
+}
+
+func (oksana *Oksana) server() *http.Server {
+	return &http.Server{
+		Addr:    ":8080",
+		Handler: oksana,
 	}
 }
 
