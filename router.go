@@ -49,3 +49,13 @@ func (router *Router) GetRoute(context *Context) Route {
 
 	return route
 }
+
+func (router *Router) find(method string, path string) Route {
+	var route Route
+
+	if val, ok := router.Routes[method+path]; ok {
+		route = val
+	}
+
+	return route
+}

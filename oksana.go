@@ -57,6 +57,35 @@ func (oksana *Oksana) GET(endpoint string, handler Handler, middleware ...Middle
 	oksana.Router.Add("GET", endpoint, handler, middleware)
 }
 
+// OPTIONS adds a HTTP Get route to router
+func (oksana *Oksana) OPTIONS(endpoint string, handler Handler, middleware ...MiddlewareHandler) {
+	oksana.Router.Add("OPTIONS", endpoint, handler, middleware)
+}
+
+// PATCH adds a HTTP Get route to router
+func (oksana *Oksana) PATCH(endpoint string, handler Handler, middleware ...MiddlewareHandler) {
+	oksana.Router.Add("PATCH", endpoint, handler, middleware)
+}
+
+// POST adds a HTTP Get route to router
+func (oksana *Oksana) POST(endpoint string, handler Handler, middleware ...MiddlewareHandler) {
+	oksana.Router.Add("POST", endpoint, handler, middleware)
+}
+
+// PUT adds a HTTP Get route to router
+func (oksana *Oksana) PUT(endpoint string, handler Handler, middleware ...MiddlewareHandler) {
+	oksana.Router.Add("PUT", endpoint, handler, middleware)
+}
+
+// Group creates a route group with a common prefix
+func (oksana *Oksana) Group(prefix string, middleware ...MiddlewareHandler) *Group {
+	return &Group{
+		Middleware: middleware,
+		Prefix:     prefix,
+		Router:     *oksana.Router,
+	}
+}
+
 func (oksana *Oksana) addroute(action string, endpoint string, handler Handler, middleware ...MiddlewareHandler) {
 	oksana.Router.Add(action, endpoint, handler, middleware)
 }
