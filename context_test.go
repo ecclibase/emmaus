@@ -26,8 +26,8 @@ func TestContext(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	// Response
 	assert.NotNil(t, context.Response)
@@ -41,8 +41,8 @@ func TestJSONResponse(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	err := context.JSON(200, User{1, "John Adams"})
 
@@ -56,8 +56,8 @@ func TestJSONErrorResponse(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	err := context.JSON(200, math.Inf(1))
 
@@ -69,8 +69,8 @@ func TestStringResponse(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	err := context.String(200, "this is a test")
 
@@ -84,8 +84,8 @@ func TestErrorResponse(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	err := context.HTTPError(500, "this is a test")
 
@@ -99,10 +99,10 @@ func TestAddingParams(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
-	context.Params = &url.Values{}
+	context.Params = url.Values{}
 	context.Params.Add("key1", "value")
 	context.Params.Add("key2", "value")
 
@@ -115,8 +115,8 @@ func TestSettingHeaders(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	context.SetHeader("Content-Type", "text/html;charset=utf-8")
 
@@ -128,8 +128,8 @@ func TestGettingHeaders(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	context.Request.Header.Set("Content-Type", "text/html;charset=utf-8")
 
@@ -141,8 +141,8 @@ func TestRedirect(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	context := NewContext()
-	context.Request = request
-	context.Response = NewResponse(writer)
+	context.SetRequest(request)
+	context.SetResponse(writer)
 
 	err := context.Redirect(301, "/")
 
@@ -158,6 +158,7 @@ func TestHasParam(t *testing.T) {
 
 	r, _ := http.NewRequest("GET", "/uri?query1=1&query2=2", nil)
 	w := httptest.NewRecorder()
+
 	oksana.ServeHTTP(w, r)
 
 	assert.True(t, oksana.Context.HasParam("query1"))

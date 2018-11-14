@@ -103,9 +103,8 @@ func (oksana *Oksana) ServeHTTP(writer http.ResponseWriter, request *http.Reques
 	var handler Handler
 
 	// create context
-	oksana.Context = NewContext()
-	oksana.Context.Request = request
-	oksana.Context.Response = NewResponse(writer)
+	oksana.Context.SetRequest(request)
+	oksana.Context.SetResponse(writer)
 
 	if route, ok := oksana.Router.GetRoute(oksana.Context); ok {
 		handler = func(*Context) error {

@@ -10,12 +10,23 @@ import (
 type Context struct {
 	Request  *http.Request
 	Response *Response
-	Params   *url.Values
+	Params   url.Values
 }
 
-// NewContext creates a new context
+// NewContext creates a new context struct
 func NewContext() *Context {
 	return &Context{}
+}
+
+// SetRequest add request to context field
+func (context *Context) SetRequest(request *http.Request) {
+	context.Request = request
+	context.Params = request.URL.Query()
+}
+
+// SetResponse add response to context field
+func (context *Context) SetResponse(writer http.ResponseWriter) {
+	context.Response = NewResponse(writer)
 }
 
 // Code writes header with HTTP code
