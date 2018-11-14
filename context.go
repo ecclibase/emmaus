@@ -18,19 +18,6 @@ func NewContext() *Context {
 	return &Context{}
 }
 
-// AddParams adds parameters to context
-// func (context *Context) AddParams(params map[string]string) {
-// 	if context.Params == nil {
-// 		context.Params = make(map[string]string)
-// 	}
-
-// 	for k, v := range params {
-// 		context.Params[k] = v
-// 	}
-
-// 	return
-// }
-
 // Code writes header with HTTP code
 func (context *Context) Code(code int) (err error) {
 	context.Response.WriteHeader(code)
