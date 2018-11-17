@@ -8,7 +8,6 @@ import (
 
 // Oksana struct holds router and context for framework
 type Oksana struct {
-	Config     Config
 	Context    *Context
 	Middleware []MiddlewareHandler
 	Router     *Router
