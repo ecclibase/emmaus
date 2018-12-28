@@ -7,6 +7,9 @@
 
 Microservice framework written in Go.
 
+## Meaning
+Slavic meaning of Oksana "praise to God"
+
 ## Example
 
 ```go
