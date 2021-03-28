@@ -169,7 +169,7 @@ func TestNotFoundHandler(t *testing.T) {
 }
 
 func TestNewServerReturnsHTTPServer(t *testing.T) {
-	config := oksana.Configuration{
+	config := Configuration{
 		Port: "8080",
 	}
 
@@ -180,7 +180,7 @@ func TestNewServerReturnsHTTPServer(t *testing.T) {
 }
 
 func TestNewServerRunsOnCorrectPort(t *testing.T) {
-	config := oksana.Configuration{
+	config := Configuration{
 		Port: "9090",
 	}
 
