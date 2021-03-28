@@ -2,6 +2,7 @@ package oksana
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -11,6 +12,11 @@ type Oksana struct {
 	Context    *Context
 	Middleware []MiddlewareHandler
 	Router     *Router
+}
+
+// Configuration struct holds values for configuring the application
+type Configuration struct {
+	Port string
 }
 
 // Handler basic function to router handlers
@@ -90,8 +96,17 @@ func (oksana *Oksana) Group(prefix string, middleware ...MiddlewareHandler) *Gro
 }
 
 // Start initates the framework to start listening for requests
-func (oksana *Oksana) Start() {
-	server := oksana.server()
+func (oksana *Oksana) Start(configuration ...Configuration) {
+	var config Configuration
+	if len(configuration) == 0 {
+		config = Configuration{
+			Port: "8080",
+		}
+	} else {
+		config = configuration[0]
+	}
+
+	server := oksana.server(config)
 	if err := server.ListenAndServe(); err != nil {
 		log.Printf("Server error: %s", err)
 	}
@@ -124,9 +139,9 @@ func (oksana *Oksana) ServeHTTP(writer http.ResponseWriter, request *http.Reques
 	return
 }
 
-func (oksana *Oksana) server() *http.Server {
+func (oksana *Oksana) server(configuration Configuration) *http.Server {
 	return &http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf(":%s", configuration.Port),
 		Handler: oksana,
 	}
 }
