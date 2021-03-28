@@ -169,15 +169,23 @@ func TestNotFoundHandler(t *testing.T) {
 }
 
 func TestNewServerReturnsHTTPServer(t *testing.T) {
+	config := Configuration{
+		Port: "8080",
+	}
+
 	oksana := New()
-	server := oksana.server()
+	server := oksana.server(config)
 
 	assert.True(t, reflect.TypeOf(server).String() == "*http.Server")
 }
 
 func TestNewServerRunsOnCorrectPort(t *testing.T) {
-	oksana := New()
-	server := oksana.server()
+	config := Configuration{
+		Port: "9090",
+	}
 
-	assert.Equal(t, ":8080", server.Addr)
+	oksana := New()
+	server := oksana.server(config)
+
+	assert.Equal(t, ":9090", server.Addr)
 }
